@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using ProjectMap.WebApi.Models;
-using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using ProjectNaam.WebApi;
 
 namespace ProjectMap.WebApi.Controllers;  
 
 [ApiController]
-[Route("WeatherFor")]
+[Route("WeatherForcast")]
 public class WeatherForecastController : ControllerBase
 {
     private static List<WeatherForecast> weatherForecasts = new List<WeatherForecast>() 
