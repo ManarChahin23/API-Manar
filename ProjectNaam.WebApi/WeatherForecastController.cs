@@ -6,7 +6,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace ProjectMap.WebApi.Controllers;  
 
 [ApiController]
-[Route("Weather")]
+[Route("WeatherFor")]
 public class WeatherForecastController : ControllerBase
 {
     private static List<WeatherForecast> weatherForecasts = new List<WeatherForecast>() 
