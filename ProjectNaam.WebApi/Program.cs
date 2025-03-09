@@ -32,12 +32,10 @@ app.MapGroup("/auth").MapIdentityApi<IdentityUser>();
 // ✅ Voeg controllers en API endpoints toe
 app.MapControllers();
 
-// ✅ Swagger alleen in development mode
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 // ✅ Start de API
 app.Run();
