@@ -27,7 +27,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization(); // Moet vóór de routes komen
 
 // ✅ Voeg Identity API routes toe onder `/auth`
-app.MapGroup("/account").MapIdentityApi<IdentityUser>();
+app.MapGroup("/auth").MapIdentityApi<IdentityUser>();
 
 // ✅ Voeg controllers en API endpoints toe
 app.MapControllers();
