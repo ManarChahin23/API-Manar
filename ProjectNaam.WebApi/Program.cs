@@ -1,30 +1,43 @@
+﻿using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// ✅ Voeg controllers toe
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
-var sqlConnectionString = builder.Configuration.GetValue<string>("SqlConnectionString");
-var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(sqlConnectionString);
+// ✅ Voeg Swagger toe
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
+// ✅ Haal de database connection string op (fallback naar environment variabele)
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+                       Environment.GetEnvironmentVariable("DefaultConnection");
+Console.WriteLine($"Using Connection String: {connectionString}");
 
+// ✅ Voeg Identity en Dapper Stores toe
+builder.Services.AddAuthorization();
+builder.Services
+    .AddIdentityApiEndpoints<IdentityUser>()
+    .AddDapperStores(options => options.ConnectionString = connectionString);
 
 var app = builder.Build();
-app.MapGet("/", () => $"The API is up. Connection string found: {(sqlConnectionStringFound ? "Yes" : "No")}");
 
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
+// ✅ Middleware volgorde is belangrijk!
 app.UseHttpsRedirection();
+app.UseAuthorization(); // Moet vóór de routes komen
 
-app.UseAuthorization();
+// ✅ Voeg Identity API routes toe onder `/auth`
+app.MapGroup("/account").MapIdentityApi<IdentityUser>();
 
+// ✅ Voeg controllers en API endpoints toe
 app.MapControllers();
 
+// ✅ Swagger alleen in development mode
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+// ✅ Start de API
 app.Run();
