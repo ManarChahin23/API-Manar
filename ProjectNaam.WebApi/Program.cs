@@ -14,6 +14,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
                        Environment.GetEnvironmentVariable("DefaultConnection");
 Console.WriteLine($"Using Connection String: {connectionString}");
 
+
 // ✅ Voeg Identity en Dapper Stores toe
 builder.Services.AddAuthorization();
 builder.Services
