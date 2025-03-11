@@ -2,34 +2,37 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ Haal de database connection string op (fallback naar environment variabele)
+// Haal de database connection string op 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        Environment.GetEnvironmentVariable("DefaultConnection");
 Console.WriteLine($"Using Connection String: {connectionString}");
 
-// ✅ CORS instellen zodat Unity toegang krijgt
+// CORS instellen zodat Unity toegang krijgt
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
         builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
-// ✅ Voeg controllers toe
+// Voeg controllers toe
 builder.Services.AddControllers();
 
-// ✅ Voeg Swagger toe
+// Voeg Swagger toe
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// ✅ Voeg Identity en Dapper Stores toe
+// Voeg Identity en Dapper Stores toe
 builder.Services
     .AddIdentityApiEndpoints<IdentityUser>()
     .AddDapperStores(options => options.ConnectionString = connectionString);
 
-// ✅ Voeg JWT authenticatie toe
+
+//  Voeg JWT authenticatie toe
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtKey) || jwtKey.Length < 32)
 {
@@ -55,26 +58,26 @@ builder.Services.AddAuthorization(); // Voeg autorisatie toe
 
 var app = builder.Build();
 
-// ✅ Middleware volgorde is BELANGRIJK!
+
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAllOrigins"); // Activeer CORS
+app.UseCors("AllowAllOrigins"); 
 
-app.UseAuthentication(); // Moet vóór Authorization komen
-app.UseAuthorization(); // Moet vóór API-routes komen
+app.UseAuthentication();
+app.UseAuthorization(); 
 
-// ✅ Voeg Identity API routes toe onder `/auth`
+// Voeg Identity API routes toe onder `/auth`
 app.MapGroup("/auth").MapIdentityApi<IdentityUser>();
 
-// ✅ Voeg controllers en API endpoints toe
+
 app.MapControllers();
 
-// ✅ Voeg Swagger UI toe
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// ✅ Zorg voor betere foutmeldingen
+
 app.UseExceptionHandler("/error");
 
-// ✅ Start de API
+
 app.Run();
