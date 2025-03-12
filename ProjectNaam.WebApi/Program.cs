@@ -11,6 +11,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
                        Environment.GetEnvironmentVariable("DefaultConnection");
 Console.WriteLine($"Using Connection String: {connectionString}");
 
+
 // CORS instellen zodat Unity toegang krijgt
 builder.Services.AddCors(options =>
 {
