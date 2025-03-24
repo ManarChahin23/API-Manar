@@ -69,6 +69,8 @@ app.UseAuthorization();
 // Voeg Identity API routes toe onder `/auth`
 app.MapGroup("/auth").MapIdentityApi<IdentityUser>();
 
+app.MapGet("/", () => "API is up");
+
 
 app.MapControllers();
 
