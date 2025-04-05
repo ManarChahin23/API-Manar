@@ -38,27 +38,22 @@ builder.Services
     .AddDapperStores(options => options.ConnectionString = connectionString);
 
 
-//  Voeg JWT authenticatie toe
-var jwtKey = builder.Configuration["Jwt:Key"];
-if (string.IsNullOrEmpty(jwtKey) || jwtKey.Length < 32)
-{
-    throw new Exception("❌ JWT Key is te kort of ontbreekt. Voeg een veilige key toe in appsettings.json!");
-}
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+// Set up Identity and Dapper stores for IdentityUser
+builder.Services.AddAuthorization();
+builder.Services
+    .AddIdentityApiEndpoints<IdentityUser>(options =>
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-        };
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+    })
+    .AddDapperStores(options =>
+    {
+        options.ConnectionString = connectionString;
     });
+
 
 builder.Services.AddAuthorization(); // Voeg autorisatie toe
 
