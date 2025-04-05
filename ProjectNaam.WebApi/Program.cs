@@ -8,8 +8,8 @@ using ProjectNaam.WebApi.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Haal de database connection string op 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       Environment.GetEnvironmentVariable("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("SqlConnectionString") ??
+                       Environment.GetEnvironmentVariable("SqlConnectionString");
 Console.WriteLine($"Using Connection String: {connectionString}");
 
 builder.Services.AddScoped<IEnvironment2DRepository>(provider =>
