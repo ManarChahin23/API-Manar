@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using ProjectNaam.WebApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +12,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
                        Environment.GetEnvironmentVariable("DefaultConnection");
 Console.WriteLine($"Using Connection String: {connectionString}");
 
+builder.Services.AddScoped<IEnvironment2DRepository>(provider =>
+    new Environment2DRepository(connectionString));
 
-// CORS instellen zodat Unity toegang krijgt
+builder.Services.AddScoped<IObject2DRepository>(provider =>
+    new Object2DRepository(connectionString));
+
+// CORS instellen zodat Unity toegang krijg
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
