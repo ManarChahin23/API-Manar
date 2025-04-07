@@ -32,11 +32,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Voeg Identity en Dapper Stores toe
-builder.Services
-    .AddIdentityApiEndpoints<IdentityUser>()
-    .AddDapperStores(options => options.ConnectionString = connectionString);
-
 
 // Set up Identity and Dapper stores for IdentityUser
 builder.Services.AddAuthorization();
@@ -54,11 +49,6 @@ builder.Services
         options.ConnectionString = connectionString;
     });
 
-
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(8080);
-});
 
 
 builder.Services.AddAuthorization(); // Voeg autorisatie toe
