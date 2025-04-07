@@ -50,6 +50,11 @@ builder.Services
     });
 
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(8080);
+});
+
 
 builder.Services.AddAuthorization(); // Voeg autorisatie toe
 
