@@ -10,7 +10,7 @@ namespace ProjectNaam.WebApi.Services
         {
             _connectionString = connectionString;
         }
-        public IDbConnection CreateConnection()
+        public virtual IDbConnection CreateConnection()
         {
             return new SqlConnection(_connectionString);
         }
