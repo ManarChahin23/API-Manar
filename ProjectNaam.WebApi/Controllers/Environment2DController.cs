@@ -62,7 +62,6 @@ namespace ProjectNaam.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
