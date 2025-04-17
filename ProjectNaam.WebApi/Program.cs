@@ -18,17 +18,17 @@ builder.Services.AddScoped<IEnvironment2DRepository>(provider =>
 builder.Services.AddScoped<IObject2DRepository>(provider =>
     new Object2DRepository(connectionString));
 
-// CORS instellen zodat Unity toegang krijg
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
         builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
-// Voeg controllers toe
+
 builder.Services.AddControllers();
 
-// Voeg Swagger toe
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

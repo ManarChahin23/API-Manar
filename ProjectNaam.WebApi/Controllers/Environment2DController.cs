@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 using ProjectNaam.WebApi.Models;
 using ProjectNaam.WebApi.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjectNaam.WebApi.Controllers
 {
@@ -61,10 +62,20 @@ namespace ProjectNaam.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var environment = await _environmentRepository.GetByIdAsync(id);
+            if (environment == null || environment.UserId != userId)
+                return NotFound();
+
             await _environmentRepository.DeleteAsync(id);
             return NoContent();
         }
+
     }
 }
